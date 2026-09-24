@@ -31,6 +31,16 @@ class H(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b)
 
+
+    def _google_verification(self):
+        b = b'google-site-verification: google1cac9f269019bde5.html'
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain; charset=utf-8')
+        self.send_header('Content-Length', str(len(b)))
+        self.send_header('Cache-Control', 'public, max-age=3600')
+        self.end_headers()
+        self.wfile.write(b)
+
     def _proxy(self, upstream_path):
         n = int(self.headers.get('Content-Length') or 0)
         data = self.rfile.read(n) if n else None
@@ -53,6 +63,8 @@ class H(BaseHTTPRequestHandler):
         path = self.path.split('?', 1)[0]
         if path == '/':
             return self._landing()
+        if path == '/google1cac9f269019bde5.html':
+            return self._google_verification()
         if path == '/today':
             qs = ('?' + self.path.split('?', 1)[1]) if '?' in self.path else ''
             return self._proxy('/' + qs)
