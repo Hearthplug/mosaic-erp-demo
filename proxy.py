@@ -9,6 +9,27 @@ def creds():
     except Exception:
         return None
 
+
+BANNERS = {
+    '/interview': (b'<div style="box-sizing:border-box;width:100%;padding:8px 14px;background:#202522;color:#fff;'
+                   b'font:13px/1.45 -apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;'
+                   b'border-left:4px solid #f26a3d">'
+                   b'<b style="color:#f26a3d">Shared sample store.</b> Your answers here reconfigure the same shop '
+                   b'every visitor sees. It resets every 6 hours - please skip real business details.</div>'),
+    '/retail': (b'<div style="box-sizing:border-box;width:100%;padding:8px 14px;background:#202522;color:#fff;'
+                b'font:13px/1.45 -apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;'
+                b'border-left:4px solid #f26a3d">'
+                b'<b style="color:#f26a3d">Shared sample store.</b> This shop was configured by the last '
+                b'visitor\'s interview answers - run the interview and it reshapes around yours. '
+                b'Resets every 6 hours.</div>'),
+    '/operations': (b'<div style="box-sizing:border-box;width:100%;padding:8px 14px;background:#202522;color:#fff;'
+                    b'font:13px/1.45 -apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;'
+                    b'border-left:4px solid #f26a3d">'
+                    b'<b style="color:#f26a3d">Shared sample store.</b> This shop was configured by the last '
+                    b'visitor\'s interview answers - run the interview and it reshapes around yours. '
+                    b'Resets every 6 hours.</div>'),
+}
+
 class H(BaseHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
 
@@ -49,6 +70,8 @@ class H(BaseHTTPRequestHandler):
         conn.request(self.command, upstream_path, body=data, headers=hdrs)
         r = conn.getresponse()
         payload = r.read()
+        if self.command == 'GET' and upstream_path in BANNERS and 'text/html' in dict(r.getheaders()).get('Content-Type', ''):
+            payload = payload.replace(b'<body>', b'<body>' + BANNERS[upstream_path], 1)
         self.send_response(r.status)
         for k, v in r.getheaders():
             if k.lower() in ('transfer-encoding', 'connection', 'content-length'):
