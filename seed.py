@@ -75,5 +75,16 @@ req('/api/retail/cash/open', {'location_id':loc['id'],'opening_minor':10000}, ke
 def sale(sku, qty, amount):
     req('/api/retail/sales', {'location_id':loc['id'],'lines':[{'product_id':prods[sku],'quantity':str(qty)}],'tenders':[{'kind':'cash','amount_minor':amount}],'currency':'USD'}, key)
 sale('RICE-5KG',2,2598); sale('OIL-1L',1,1199); sale('TEA-250',3,1947); sale('HONEY-500',1,899)
+# Pending Build review draft: a supplier-bill report drafted from a photo
+# extraction and left at the review step so visitors see a real draft state.
+req('/api/build/draft-from-extraction', {
+ 'target': 'report',
+ 'extraction': {
+   'document_type': 'supplier bill',
+   'summary': 'Supplier bill from Golden Grains Co. for oats, tea and almonds',
+   'fields': [{'name': 'vendor', 'value': 'Golden Grains Co.'}]
+ },
+ 'hint': 'payables aging report for this supplier'
+}, key)
 json.dump({'wid': wid, 'key': key, 'name': 'Northstar General Store'}, open('/tmp/demo_creds.json', 'w'))
 print('seeded workspace', wid)
