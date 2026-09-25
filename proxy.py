@@ -65,6 +65,22 @@ class H(BaseHTTPRequestHandler):
             return self._landing()
         if path == '/google1cac9f269019bde5.html':
             return self._google_verification()
+        if path == '/signin':
+            qs = self.path.split('?', 1)[1] if '?' in self.path else ''
+            nxt = ''
+            for part in qs.split('&'):
+                if part.startswith('next=') and part[5:].startswith('%2F'):
+                    nxt = '?next=' + part[5:]
+                    break
+            target = '/' + nxt
+            b = b''
+            self.send_response(302)
+            self.send_header('Location', target)
+            self.send_header('Content-Length', '0')
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            self.wfile.write(b)
+            return
         if path == '/today':
             qs = ('?' + self.path.split('?', 1)[1]) if '?' in self.path else ''
             return self._proxy('/' + qs)
