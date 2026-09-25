@@ -15,8 +15,10 @@ while true; do
   [ -n "$ok" ] && python /app/seed.py
   python /app/proxy.py &
   PROXY=$!
+  ( while true; do sleep 900; python /app/cleanup_drafts.py || true; done ) &
+  CLEAN=$!
   sleep "$RESET"
-  kill $PROXY $APP 2>/dev/null || true
+  kill $PROXY $APP $CLEAN 2>/dev/null || true
   wait $PROXY 2>/dev/null || true
   wait $APP 2>/dev/null || true
 done
