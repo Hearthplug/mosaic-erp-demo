@@ -1,5 +1,5 @@
 ---
-title: Mosaic ERP Demo
+title: Mosaic Shop Intelligence Demo
 emoji: 🏬
 colorFrom: green
 colorTo: gray
@@ -7,6 +7,6 @@ sdk: docker
 app_port: 8000
 ---
 
-# Mosaic ERP - live demo
+# Mosaic Shop Intelligence - live demo
 
-Public demo of [Mosaic ERP](https://mosaic-erp.pages.dev), a free and open-source retail ERP, running the sample Northstar General Store. The demo resets every 6 hours. Source: https://github.com/Hearthplug/mosaic-erp
+Public demo of [Mosaic Shop Intelligence](https://mosaic-erp.pages.dev), a free and open-source retail ERP, running the sample Northstar General Store. The demo resets every 6 hours. Source: https://github.com/Hearthplug/mosaic-erp
